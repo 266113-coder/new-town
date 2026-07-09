@@ -80,7 +80,7 @@ const events = {
       options: [
         { label: "소방 인력을 크게 늘린다", cost: 240000000, economy: -1, happiness: 10, growth: 2 },
         { label: "순찰만 늘린다", cost: 90000000, economy: 0, happiness: 5, growth: 1 },
-        { label: "대응하지 않는다", cost: 0, economy: 1, happiness: -12, growth: -5 }
+        { label: "대응하지 않는다", cost: 0, economy: 1, happiness: -12, growth: -5, instantFail: "초기 진화가 늦어져 산불이 주거지 가까이 번졌습니다. 정부는 안전 관리 실패로 도시 운영을 즉시 중단했습니다." }
       ]
     }
   ],
@@ -92,7 +92,7 @@ const events = {
       options: [
         { label: "배수 시설을 대폭 보강한다", cost: 320000000, economy: -1, happiness: 11, growth: 6 },
         { label: "위험 구역만 보강한다", cost: 140000000, economy: 0, happiness: 5, growth: 3 },
-        { label: "예산을 아낀다", cost: 0, economy: 2, happiness: -13, growth: -6 }
+        { label: "예산을 아낀다", cost: 0, economy: 2, happiness: -13, growth: -6, instantFail: "폭우가 쏟아진 뒤 저지대가 침수되었습니다. 시민 대피가 늦어지며 시장은 즉시 해임되었습니다." }
       ]
     },
     {
@@ -176,7 +176,7 @@ const events = {
       options: [
         { label: "제설 장비를 대량 투입한다", cost: 220000000, economy: -1, happiness: 10, growth: 3 },
         { label: "주요 도로만 치운다", cost: 80000000, economy: 0, happiness: 5, growth: 1 },
-        { label: "자연 해동을 기다린다", cost: 0, economy: 2, happiness: -12, growth: -4 }
+        { label: "자연 해동을 기다린다", cost: 0, economy: 2, happiness: -12, growth: -4, instantFail: "출근길 도로가 얼어붙고 학교 주변 사고가 잇따랐습니다. 정부는 겨울 안전 실패로 도시를 폐쇄했습니다." }
       ]
     },
     {
@@ -186,7 +186,7 @@ const events = {
       options: [
         { label: "무료 예방접종을 크게 시행한다", cost: 240000000, economy: -1, happiness: 12, growth: 2, resultScene: { title: "보건소 앞의 인사", text: "예방접종을 마친 아이가 작은 목소리로 말했습니다. \"시장님 고마워요. 이제 학교에 갈 수 있어요.\"" } },
         { label: "저소득층 아이부터 지원한다", cost: 90000000, economy: 0, happiness: 6, growth: 1, resultScene: { title: "아이의 편지", text: "다음 날 시장실에 삐뚤빼뚤한 편지가 도착했습니다. \"아프지 않게 도와줘서 고맙습니다.\"" } },
-        { label: "개인 예방에 맡긴다", cost: 0, economy: 1, happiness: -13, growth: -3 }
+        { label: "개인 예방에 맡긴다", cost: 0, economy: 1, happiness: -13, growth: -3, instantFail: "독감이 학교와 복지시설로 빠르게 퍼졌습니다. 보건 대응 실패로 긴급 운영 중단 명령이 내려졌습니다." }
       ]
     },
     {
@@ -366,7 +366,7 @@ const moreSeasonEvents = {
       options: [
         { label: "보건센터를 크게 세운다", cost: 180000000, economy: 1, happiness: 11, growth: 5 },
         { label: "의원 유치를 지원한다", cost: 70000000, economy: 1, happiness: 6, growth: 2 },
-        { label: "기다려 본다", cost: 0, economy: 1, happiness: -8, growth: -2 }
+        { label: "기다려 본다", cost: 0, economy: 1, happiness: -8, growth: -2, instantFail: "응급 환자가 멀리 있는 병원으로 이송되다 위험에 빠졌습니다. 의료 공백 책임으로 도시 사업이 중단되었습니다." }
       ]
     },
     {
@@ -398,7 +398,7 @@ const moreSeasonEvents = {
       options: [
         { label: "가로등과 순찰을 모두 늘린다", cost: 150000000, economy: 0, happiness: 10, growth: 4 },
         { label: "가로등부터 설치한다", cost: 60000000, economy: 0, happiness: 5, growth: 2 },
-        { label: "신고 대응만 한다", cost: 0, economy: 1, happiness: -7, growth: -2 }
+        { label: "신고 대응만 한다", cost: 0, economy: 1, happiness: -7, growth: -2, instantFail: "야간 범죄가 연달아 발생했습니다. 시민들이 대규모로 떠나며 정부가 시장 권한을 회수했습니다." }
       ]
     },
     {
@@ -452,7 +452,7 @@ const moreSeasonEvents = {
       options: [
         { label: "제설 기지를 만든다", cost: 150000000, economy: 0, happiness: 8, growth: 5 },
         { label: "임시 창고를 빌린다", cost: 50000000, economy: 0, happiness: 4, growth: 2 },
-        { label: "현재 창고로 버틴다", cost: 0, economy: 1, happiness: -6, growth: -2 }
+        { label: "현재 창고로 버틴다", cost: 0, economy: 1, happiness: -6, growth: -2, instantFail: "제설 물자가 부족해 주요 도로가 며칠 동안 막혔습니다. 물류와 응급 대응이 멈추며 조기 실패가 확정되었습니다." }
       ]
     },
     {
@@ -605,11 +605,12 @@ function renderEvent() {
   state.currentEvent.options.forEach((option, index) => {
     const button = document.createElement("button");
     button.className = "choice-btn";
+    if (option.instantFail) button.classList.add("danger-choice");
     button.type = "button";
     button.innerHTML = `
       <span>
         <strong>${index + 1}. ${option.label}</strong>
-        <small>경제 ${signed(option.economy)} / 만족도 ${signed(option.happiness)} / 발전도 ${signed(option.growth)}</small>
+        <small>경제 ${signed(option.economy)} / 만족도 ${signed(option.happiness)} / 발전도 ${signed(option.growth)}${option.instantFail ? " / 조기 실패 위험" : ""}</small>
       </span>
       <em>${option.cost ? formatEok(option.cost) : "0원"}</em>
     `;

@@ -1651,6 +1651,18 @@ meter {
     #ffffff;
 }
 
+.choice-btn.danger-choice {
+  border-color: rgba(173, 69, 59, 0.28);
+  background:
+    linear-gradient(90deg, rgba(255, 220, 214, 0.7), rgba(255, 253, 247, 0.96)),
+    #fffdf7;
+}
+
+.choice-btn.danger-choice em {
+  background: #ffd1c9;
+  color: #87392f;
+}
+
 .actionbar {
   flex-wrap: wrap;
   justify-content: center;
