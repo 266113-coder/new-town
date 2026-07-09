@@ -33,6 +33,7 @@ const seasons = [
 ];
 
 const dialogueLines = [
+  "(내가 이 도시의 시장이 된다고...?)",
   "지원자가 아무도 없었습니다.",
   "당신을 신도시의 시장으로 임명하겠습니다.",
   "당신에게 1년을 드리겠습니다.",
@@ -508,6 +509,10 @@ function formatEok(amount) {
   return `${eok.toFixed(1)}억`;
 }
 
+function clampIncome(amount) {
+  return Math.max(10000000, Math.min(200000000, Math.round(amount)));
+}
+
 function applyChange(change) {
   const canPay = state.money >= change.cost;
   if (!canPay && change.cost > 0) {
@@ -524,8 +529,8 @@ function applyChange(change) {
   const populationLoss = Math.round((Math.max(0, -change.growth) * 5) + (Math.max(0, -change.happiness) * 3));
   state.population = Math.max(80, state.population + populationChange - populationLoss);
 
-  const seasonalIncome = 42000000 + (state.economy * 950000) + (state.growth * 700000);
-  state.money += Math.max(0, seasonalIncome);
+  const seasonalIncome = 18000000 + (state.economy * 620000) + (state.growth * 440000);
+  state.money += clampIncome(seasonalIncome);
   state.debt += Math.round(state.debt * 0.006);
   renderStats();
 }
@@ -643,8 +648,8 @@ function startGame() {
 }
 
 function advanceSeason() {
-  const bonus = 90000000 + (state.economy * 1300000) + (state.growth * 950000);
-  state.money += Math.round(bonus);
+  const bonus = 30000000 + (state.economy * 800000) + (state.growth * 520000);
+  state.money += clampIncome(bonus);
   state.debt += Math.round(state.debt * 0.018);
   state.seasonIndex += 1;
   state.eventIndex = 0;
@@ -676,9 +681,11 @@ function finishGame() {
   const debtPenalty = state.debt > 0 ? Math.min(55, Math.round((state.debt / Math.max(state.initialDebt, 1)) * 38)) : 0;
   const lowStatPenalty = Math.max(0, 55 - weakestStat) * 0.45;
   const cashAfterDebtBonus = state.debt <= 0 ? Math.min(8, Math.floor(state.money / 250000000)) : 0;
-  const score = clamp(Math.round((baseAverage * 0.82) + (weakestStat * 0.18) + cashAfterDebtBonus - debtPenalty - balancePenalty - lowStatPenalty));
-  const failed = state.money < 0 || state.debt > 0 || score < 50 || weakestStat < 35;
-  const excellent = !failed && score >= 88 && state.economy >= 78 && state.happiness >= 78 && state.growth >= 78 && (strongestStat - weakestStat) <= 18;
+  const rawScore = clamp(Math.round((baseAverage * 0.82) + (weakestStat * 0.18) + cashAfterDebtBonus - debtPenalty - balancePenalty - lowStatPenalty));
+  const perfectStats = state.economy >= 95 && state.happiness >= 95 && state.growth >= 95;
+  const score = state.debt <= 0 && perfectStats ? 100 : Math.min(99, rawScore);
+  const failed = state.money < 0 || state.debt > 0 || score < 90;
+  const excellent = !failed && score === 100;
 
   document.getElementById("finalScore").textContent = score;
   document.getElementById("finalEconomy").textContent = Math.round(state.economy);
@@ -696,7 +703,28 @@ function finishGame() {
     document.getElementById("endingTitle").textContent = "성공 엔딩";
     document.getElementById("endingMessage").textContent = `${autoRepaid ? `남은 빚 ${formatEok(autoRepaid)}을 자동 상환했습니다. ` : ""}도시는 안정적으로 성장했습니다. 시민들은 새로운 신도시의 내일을 기대하고 있습니다.`;
   }
+  renderFireworks(!failed);
   showScreen("ending");
+}
+
+function renderFireworks(active) {
+  const ending = document.getElementById("endingScreen");
+  ending.querySelectorAll(".fireworks").forEach((node) => node.remove());
+  ending.classList.toggle("has-fireworks", active);
+  if (!active) return;
+
+  const fireworks = document.createElement("div");
+  fireworks.className = "fireworks";
+  fireworks.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < 28; i += 1) {
+    const spark = document.createElement("span");
+    spark.style.setProperty("--x", `${8 + Math.random() * 84}%`);
+    spark.style.setProperty("--y", `${8 + Math.random() * 50}%`);
+    spark.style.setProperty("--delay", `${Math.random() * 1.6}s`);
+    spark.style.setProperty("--hue", `${20 + Math.random() * 300}`);
+    fireworks.appendChild(spark);
+  }
+  ending.appendChild(fireworks);
 }
 
 function resetGame() {
@@ -723,6 +751,7 @@ function resetGame() {
   dialogueIndex = 0;
   document.getElementById("dialogueText").textContent = dialogueLines[0];
   updateDialogueProgress();
+  renderFireworks(false);
   updateSelectedAvatar("1");
   document.getElementById("posterStep").style.display = "block";
   document.getElementById("dialogueBox").classList.remove("is-active");
@@ -744,7 +773,12 @@ function advanceDialogue() {
 }
 
 function updateDialogueProgress() {
-  document.querySelectorAll(".dialogue-dots span").forEach((dot, index) => {
+  const dotWrap = document.querySelector(".dialogue-dots");
+  if (dotWrap.children.length !== dialogueLines.length) {
+    dotWrap.innerHTML = "";
+    dialogueLines.forEach(() => dotWrap.appendChild(document.createElement("span")));
+  }
+  dotWrap.querySelectorAll("span").forEach((dot, index) => {
     dot.classList.toggle("is-active", index === dialogueIndex);
   });
 }
