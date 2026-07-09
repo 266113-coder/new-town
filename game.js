@@ -587,6 +587,7 @@ function renderSeasonWrapUp(season) {
 }
 
 function renderEvent() {
+  clearMapResultScene();
   const season = seasons[state.seasonIndex].name;
   const list = events[season];
   if (state.eventIndex >= list.length) {
@@ -633,9 +634,10 @@ function renderEvent() {
 
 function renderResultScene(scene) {
   state.currentEvent = null;
-  document.getElementById("eventMark").textContent = "편";
-  document.getElementById("eventTitle").textContent = scene.title;
-  document.getElementById("eventDescription").textContent = scene.text;
+  showMapResultScene(scene);
+  document.getElementById("eventMark").textContent = "✓";
+  document.getElementById("eventTitle").textContent = "선택 결과 확인";
+  document.getElementById("eventDescription").textContent = "도시 지도에 나타난 결과를 확인한 뒤 다음 사건으로 넘어가세요.";
   document.getElementById("eventSeason").textContent = "선택 결과";
 
   const choices = document.getElementById("choices");
@@ -650,8 +652,26 @@ function renderResultScene(scene) {
     </span>
     <em>계속</em>
   `;
-  button.addEventListener("click", renderEvent);
+  button.addEventListener("click", () => {
+    clearMapResultScene();
+    renderEvent();
+  });
   choices.appendChild(button);
+}
+
+function showMapResultScene(scene) {
+  const resultScene = document.getElementById("mapResultScene");
+  resultScene.innerHTML = `
+    <strong>${scene.title}</strong>
+    <span>${scene.text}</span>
+  `;
+  resultScene.classList.add("is-visible");
+}
+
+function clearMapResultScene() {
+  const resultScene = document.getElementById("mapResultScene");
+  resultScene.classList.remove("is-visible");
+  resultScene.innerHTML = "";
 }
 
 function triggerInstantFailure(message) {
