@@ -292,6 +292,19 @@ button:disabled {
   line-height: 1.45;
 }
 
+.dialogue-copy #dialogueText.is-thought {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  min-height: auto;
+  padding: 14px 18px;
+  border: 2px dashed rgba(49, 91, 116, 0.34);
+  border-radius: 18px 18px 18px 4px;
+  background: #f2f8fb;
+  color: #315b74;
+  font-style: italic;
+}
+
 .dialogue-seal {
   display: grid;
   place-items: center;
@@ -581,8 +594,13 @@ button:disabled {
 
 .avatar-3 .hair {
   width: 204px;
-  height: 138px;
-  border-radius: 100px 100px 46px 46px;
+  height: 218px;
+  top: 52px;
+  border-radius: 100px 100px 72px 72px;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.18) 0 18px, transparent 19px),
+    linear-gradient(90deg, var(--hair) 0 18%, transparent 18% 82%, var(--hair) 82% 100%),
+    linear-gradient(180deg, var(--hair) 0 100%);
 }
 
 .avatar-4 .hair {
@@ -592,9 +610,14 @@ button:disabled {
 }
 
 .avatar-5 .hair {
-  width: 188px;
-  height: 116px;
-  border-radius: 86px 86px 38px 38px;
+  width: 198px;
+  height: 196px;
+  top: 54px;
+  border-radius: 92px 92px 58px 58px;
+  background:
+    radial-gradient(circle at 70% 18%, rgba(255, 255, 255, 0.16) 0 16px, transparent 17px),
+    linear-gradient(90deg, var(--hair) 0 16%, transparent 16% 84%, var(--hair) 84% 100%),
+    linear-gradient(180deg, var(--hair) 0 100%);
 }
 
 .avatar-1 .hair {
@@ -605,7 +628,9 @@ button:disabled {
 
 .avatar-1 .face {
   background:
-    linear-gradient(180deg, transparent 0 36%, rgba(110, 78, 66, 0.18) 36% 37%, transparent 37% 43%, rgba(110, 78, 66, 0.13) 43% 44%, transparent 44%),
+    linear-gradient(180deg, transparent 0 25%, rgba(110, 78, 66, 0.16) 25% 26%, transparent 26% 31%, rgba(110, 78, 66, 0.12) 31% 32%, transparent 32%),
+    radial-gradient(ellipse at 32% 47%, transparent 0 14px, rgba(110, 78, 66, 0.13) 15px 16px, transparent 17px),
+    radial-gradient(ellipse at 68% 47%, transparent 0 14px, rgba(110, 78, 66, 0.12) 15px 16px, transparent 17px),
     radial-gradient(circle at 34% 58%, rgba(170, 88, 94, 0.13) 0 11px, transparent 12px),
     radial-gradient(circle at 66% 58%, rgba(170, 88, 94, 0.12) 0 11px, transparent 12px),
     linear-gradient(105deg, rgba(255, 255, 255, 0.32), transparent 36%),
@@ -614,7 +639,9 @@ button:disabled {
 
 .avatar-2 .face {
   background:
-    linear-gradient(180deg, transparent 0 34%, rgba(96, 68, 58, 0.2) 34% 35%, transparent 35% 42%, rgba(96, 68, 58, 0.14) 42% 43%, transparent 43%),
+    linear-gradient(180deg, transparent 0 24%, rgba(96, 68, 58, 0.16) 24% 25%, transparent 25% 30%, rgba(96, 68, 58, 0.12) 30% 31%, transparent 31%),
+    radial-gradient(ellipse at 32% 47%, transparent 0 13px, rgba(96, 68, 58, 0.13) 14px 15px, transparent 16px),
+    radial-gradient(ellipse at 68% 47%, transparent 0 13px, rgba(96, 68, 58, 0.12) 14px 15px, transparent 16px),
     radial-gradient(circle at 34% 58%, rgba(150, 82, 84, 0.13) 0 10px, transparent 11px),
     radial-gradient(circle at 66% 58%, rgba(150, 82, 84, 0.12) 0 10px, transparent 11px),
     linear-gradient(105deg, rgba(255, 255, 255, 0.26), transparent 36%),
@@ -806,12 +833,27 @@ button:disabled {
 .candidate-option {
   display: grid;
   place-items: center;
-  min-height: 118px;
-  padding: 6px;
+  gap: 5px;
+  min-height: 142px;
+  padding: 8px 6px;
   border: 2px solid rgba(38, 50, 56, 0.1);
   border-radius: 8px;
   background: #f8fbf9;
   box-shadow: none;
+}
+
+.candidate-label {
+  display: inline-grid;
+  place-items: center;
+  min-height: 24px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #eef5f1;
+  color: #354852;
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .candidate-option.is-selected {
@@ -837,6 +879,15 @@ button:disabled {
     #edf3f5;
   border: 2px solid #ffffff;
   box-shadow: 0 6px 12px rgba(38, 50, 56, 0.14);
+}
+
+.candidate-avatar.avatar-3,
+.candidate-avatar.avatar-5 {
+  background:
+    radial-gradient(circle at 50% 7%, rgba(255, 255, 255, 0.88) 0 18px, transparent 19px),
+    linear-gradient(90deg, transparent 0 18%, var(--hair) 18% 30%, transparent 30% 70%, var(--hair) 70% 82%, transparent 82% 100%),
+    linear-gradient(180deg, transparent 0 57%, var(--suit-main) 57% 100%),
+    #edf3f5;
 }
 
 .candidate-avatar::before {
@@ -871,7 +922,9 @@ button:disabled {
 
 .candidate-avatar.avatar-1::before {
   background:
-    linear-gradient(180deg, transparent 0 34%, rgba(90, 72, 64, 0.23) 34% 35%, transparent 35% 41%, rgba(90, 72, 64, 0.16) 41% 42%, transparent 42%),
+    linear-gradient(180deg, transparent 0 24%, rgba(90, 72, 64, 0.18) 24% 25%, transparent 25% 30%, rgba(90, 72, 64, 0.13) 30% 31%, transparent 31%),
+    radial-gradient(ellipse at 32% 47%, transparent 0 5px, rgba(90, 72, 64, 0.14) 6px 7px, transparent 8px),
+    radial-gradient(ellipse at 68% 47%, transparent 0 5px, rgba(90, 72, 64, 0.13) 6px 7px, transparent 8px),
     radial-gradient(ellipse at 34% 45%, var(--line) 0 3px, transparent 4px),
     radial-gradient(ellipse at 66% 45%, var(--line) 0 2px, transparent 3px),
     radial-gradient(circle at 34% 62%, rgba(160, 90, 90, 0.14) 0 5px, transparent 6px),
@@ -888,7 +941,9 @@ button:disabled {
 
 .candidate-avatar.avatar-2::before {
   background:
-    linear-gradient(180deg, transparent 0 35%, rgba(82, 62, 56, 0.22) 35% 36%, transparent 36% 43%, rgba(82, 62, 56, 0.13) 43% 44%, transparent 44%),
+    linear-gradient(180deg, transparent 0 23%, rgba(82, 62, 56, 0.17) 23% 24%, transparent 24% 30%, rgba(82, 62, 56, 0.12) 30% 31%, transparent 31%),
+    radial-gradient(ellipse at 32% 47%, transparent 0 5px, rgba(82, 62, 56, 0.14) 6px 7px, transparent 8px),
+    radial-gradient(ellipse at 68% 47%, transparent 0 5px, rgba(82, 62, 56, 0.13) 6px 7px, transparent 8px),
     radial-gradient(ellipse at 33% 44%, var(--line) 0 2px, transparent 3px),
     radial-gradient(ellipse at 67% 45%, var(--line) 0 3px, transparent 4px),
     radial-gradient(ellipse at 50% 53%, rgba(70, 60, 55, 0.28) 0 3px, transparent 4px),
@@ -912,8 +967,8 @@ button:disabled {
     radial-gradient(circle at 66% 44%, var(--line) 0 2px, transparent 3px),
     radial-gradient(circle at 34% 62%, rgba(227, 115, 116, 0.22) 0 5px, transparent 6px),
     radial-gradient(circle at 66% 62%, rgba(227, 115, 116, 0.2) 0 5px, transparent 6px),
-    linear-gradient(90deg, var(--hair) 0 13%, transparent 13% 87%, var(--hair) 87% 100%),
-    linear-gradient(180deg, var(--hair) 0 18%, transparent 18%),
+    linear-gradient(90deg, var(--hair) 0 12%, transparent 12% 88%, var(--hair) 88% 100%),
+    linear-gradient(180deg, var(--hair) 0 13%, transparent 13%),
     var(--skin);
 }
 
@@ -924,8 +979,8 @@ button:disabled {
     radial-gradient(ellipse at 50% 54%, rgba(75, 56, 48, 0.22) 0 2px, transparent 3px),
     radial-gradient(circle at 34% 62%, rgba(227, 115, 116, 0.22) 0 5px, transparent 6px),
     radial-gradient(circle at 66% 62%, rgba(227, 115, 116, 0.2) 0 5px, transparent 6px),
-    linear-gradient(90deg, var(--hair) 0 14%, transparent 14% 86%, var(--hair) 86% 100%),
-    linear-gradient(180deg, var(--hair) 0 16%, transparent 16%),
+    linear-gradient(90deg, var(--hair) 0 12%, transparent 12% 88%, var(--hair) 88% 100%),
+    linear-gradient(180deg, var(--hair) 0 12%, transparent 12%),
     var(--skin);
 }
 
@@ -959,8 +1014,8 @@ button:disabled {
     radial-gradient(ellipse at 48% 54%, rgba(79, 61, 54, 0.22) 0 2px, transparent 3px),
     radial-gradient(circle at 34% 62%, rgba(227, 115, 116, 0.2) 0 5px, transparent 6px),
     radial-gradient(circle at 66% 62%, rgba(227, 115, 116, 0.18) 0 5px, transparent 6px),
-    linear-gradient(90deg, var(--hair) 0 16%, transparent 16% 84%, var(--hair) 84% 100%),
-    linear-gradient(180deg, var(--hair) 0 15%, transparent 15%),
+    linear-gradient(90deg, var(--hair) 0 12%, transparent 12% 88%, var(--hair) 88% 100%),
+    linear-gradient(180deg, var(--hair) 0 12%, transparent 12%),
     var(--skin);
 }
 
@@ -1587,6 +1642,13 @@ meter {
   background: var(--mint);
   font-style: normal;
   font-weight: 900;
+}
+
+.choice-btn.result-continue {
+  border-color: rgba(49, 91, 116, 0.26);
+  background:
+    linear-gradient(90deg, rgba(151, 218, 197, 0.24), rgba(255, 255, 255, 0.92)),
+    #ffffff;
 }
 
 .actionbar {

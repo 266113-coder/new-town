@@ -144,7 +144,7 @@ const events = {
       options: [
         { label: "도시 전체를 사전 점검한다", cost: 300000000, economy: -1, happiness: 10, growth: 5 },
         { label: "주요 시설만 점검한다", cost: 120000000, economy: 0, happiness: 5, growth: 2 },
-        { label: "지켜본다", cost: 0, economy: 2, happiness: -12, growth: -6 }
+        { label: "지켜본다", cost: 0, economy: 2, happiness: -12, growth: -6, instantFail: "태풍 대비를 하지 않은 밤, 하천이 넘치고 도로가 끊겼습니다. 정부는 즉시 도시 운영 중단을 명령했습니다." }
       ]
     },
     {
@@ -184,8 +184,8 @@ const events = {
       title: "독감 유행",
       description: "병원과 보건소가 바빠졌습니다.",
       options: [
-        { label: "무료 예방접종을 크게 시행한다", cost: 240000000, economy: -1, happiness: 12, growth: 2 },
-        { label: "취약계층부터 지원한다", cost: 90000000, economy: 0, happiness: 6, growth: 1 },
+        { label: "무료 예방접종을 크게 시행한다", cost: 240000000, economy: -1, happiness: 12, growth: 2, resultScene: { title: "보건소 앞의 인사", text: "예방접종을 마친 아이가 작은 목소리로 말했습니다. \"시장님 고마워요. 이제 학교에 갈 수 있어요.\"" } },
+        { label: "저소득층 아이부터 지원한다", cost: 90000000, economy: 0, happiness: 6, growth: 1, resultScene: { title: "아이의 편지", text: "다음 날 시장실에 삐뚤빼뚤한 편지가 도착했습니다. \"아프지 않게 도와줘서 고맙습니다.\"" } },
         { label: "개인 예방에 맡긴다", cost: 0, economy: 1, happiness: -13, growth: -3 }
       ]
     },
@@ -195,7 +195,7 @@ const events = {
       description: "주민들이 겨울 난방비 부담을 호소합니다.",
       options: [
         { label: "난방비를 넓게 지원한다", cost: 280000000, economy: -2, happiness: 13, growth: 2 },
-        { label: "저소득층만 지원한다", cost: 110000000, economy: 0, happiness: 7, growth: 1 },
+        { label: "저소득층만 지원한다", cost: 110000000, economy: 0, happiness: 7, growth: 1, resultScene: { title: "따뜻한 밤", text: "오래된 임대주택 창문에 불이 켜졌습니다. 한 주민이 난방비 고지서 옆에 감사 쪽지를 남겼습니다." } },
         { label: "지원하지 않는다", cost: 0, economy: 2, happiness: -11, growth: -2 }
       ]
     },
@@ -253,7 +253,7 @@ const extraEvents = {
       options: [
         { label: "변전 설비를 보강한다", cost: 180000000, economy: 4, happiness: 7, growth: 5 },
         { label: "공공시설부터 절전한다", cost: 60000000, economy: 2, happiness: 3, growth: 2 },
-        { label: "주의 방송만 한다", cost: 0, economy: 1, happiness: -7, growth: -2 }
+        { label: "주의 방송만 한다", cost: 0, economy: 1, happiness: -7, growth: -2, instantFail: "대정전이 발생했습니다. 병원과 교통망이 멈추며 시민 안전이 크게 위협받아 시장직이 즉시 해임되었습니다." }
       ]
     },
     {
@@ -271,7 +271,7 @@ const extraEvents = {
       title: "하천 청소",
       description: "비가 온 뒤 하천 주변에 쓰레기가 쌓였습니다.",
       options: [
-        { label: "하천 공원까지 정비한다", cost: 130000000, economy: 1, happiness: 9, growth: 5 },
+        { label: "하천 공원까지 정비한다", cost: 130000000, economy: 1, happiness: 9, growth: 5, resultScene: { title: "깨끗해진 산책로", text: "청소가 끝난 저녁, 주민들이 하천 사진과 함께 감사 편지를 보냈습니다. \"시장님, 아이와 걷는 길이 다시 좋아졌어요.\"" } },
         { label: "청소 인력만 보낸다", cost: 50000000, economy: 0, happiness: 4, growth: 2 },
         { label: "자원봉사에 맡긴다", cost: 0, economy: 1, happiness: -4, growth: -1 }
       ]
@@ -615,11 +615,59 @@ function renderEvent() {
     `;
     button.addEventListener("click", () => {
       applyChange(option);
+      if (option.instantFail) {
+        triggerInstantFailure(option.instantFail);
+        return;
+      }
       state.eventIndex += 1;
+      if (option.resultScene) {
+        renderResultScene(option.resultScene);
+        return;
+      }
       renderEvent();
     });
     choices.appendChild(button);
   });
+}
+
+function renderResultScene(scene) {
+  state.currentEvent = null;
+  document.getElementById("eventMark").textContent = "편";
+  document.getElementById("eventTitle").textContent = scene.title;
+  document.getElementById("eventDescription").textContent = scene.text;
+  document.getElementById("eventSeason").textContent = "선택 결과";
+
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+  const button = document.createElement("button");
+  button.className = "choice-btn result-continue";
+  button.type = "button";
+  button.innerHTML = `
+    <span>
+      <strong>도시 운영을 계속한다</strong>
+      <small>결과를 확인했습니다. 다음 사건으로 넘어갑니다.</small>
+    </span>
+    <em>계속</em>
+  `;
+  button.addEventListener("click", renderEvent);
+  choices.appendChild(button);
+}
+
+function triggerInstantFailure(message) {
+  clearInterval(state.timerId);
+  state.money = 0;
+  state.happiness = clamp(state.happiness - 25);
+  state.growth = clamp(state.growth - 20);
+  renderStats();
+  document.getElementById("finalScore").textContent = "0";
+  document.getElementById("finalEconomy").textContent = Math.round(state.economy);
+  document.getElementById("finalHappy").textContent = Math.round(state.happiness);
+  document.getElementById("finalGrowth").textContent = Math.round(state.growth);
+  document.getElementById("finalDebt").textContent = formatEok(state.debt);
+  document.getElementById("endingTitle").textContent = "조기 실패";
+  document.getElementById("endingMessage").textContent = message;
+  renderFireworks(false);
+  showScreen("ending");
 }
 
 function signed(value) {
@@ -749,8 +797,7 @@ function resetGame() {
   selectedInvestment = "";
   selectedAvatar = "1";
   dialogueIndex = 0;
-  document.getElementById("dialogueText").textContent = dialogueLines[0];
-  updateDialogueProgress();
+  renderDialogueLine();
   renderFireworks(false);
   updateSelectedAvatar("1");
   document.getElementById("posterStep").style.display = "block";
@@ -762,14 +809,21 @@ function resetGame() {
 
 document.getElementById("skipIntroBtn").addEventListener("click", () => showScreen("setup"));
 
+function renderDialogueLine() {
+  const text = dialogueLines[dialogueIndex];
+  const dialogueText = document.getElementById("dialogueText");
+  dialogueText.textContent = text;
+  dialogueText.classList.toggle("is-thought", text.startsWith("("));
+  updateDialogueProgress();
+}
+
 function advanceDialogue() {
   dialogueIndex += 1;
   if (dialogueIndex >= dialogueLines.length) {
     showScreen("setup");
     return;
   }
-  document.getElementById("dialogueText").textContent = dialogueLines[dialogueIndex];
-  updateDialogueProgress();
+  renderDialogueLine();
 }
 
 function updateDialogueProgress() {
@@ -791,6 +845,7 @@ document.getElementById("nextDialogueBtn").addEventListener("click", (event) => 
 document.getElementById("posterStep").addEventListener("click", () => {
   document.getElementById("posterStep").style.display = "none";
   document.getElementById("dialogueBox").classList.add("is-active");
+  renderDialogueLine();
 });
 
 document.getElementById("dialogueBox").addEventListener("click", advanceDialogue);
