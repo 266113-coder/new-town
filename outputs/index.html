@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>신도시 프로젝트</title>
+    <link rel="stylesheet" href="./styles.css?v=20260710-harder-faces" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <section id="introScreen" class="screen intro-screen is-active" aria-label="프롤로그">
+        <button id="skipIntroBtn" class="skip-btn" type="button">Skip</button>
+        <div class="poster" id="posterStep">
+          <div class="poster-sun"></div>
+          <div class="poster-city">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <p class="eyebrow">정부 공고</p>
+          <h1>신도시 건설!<br />새로운 시장을 모집합니다.</h1>
+          <p>1년 안에 도시를 성장시키고, 주민을 행복하게 만들고, 빚까지 갚아 주세요.</p>
+        </div>
+        <div class="dialogue" id="dialogueBox">
+          <div class="dialogue-seal">정부</div>
+          <div class="dialogue-copy">
+            <p class="eyebrow">정부 청사 브리핑</p>
+            <p id="dialogueText">지원자가 아무도 없었습니다.</p>
+          </div>
+          <div class="dialogue-footer">
+            <div class="dialogue-dots" aria-hidden="true">
+              <span class="is-active"></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button id="nextDialogueBtn" class="primary-btn" type="button">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="setupScreen" class="screen setup-screen" aria-label="게임 시작 설정">
+        <div class="setup-art" aria-hidden="true">
+          <div id="mayorPortrait" class="mayor-portrait avatar-1">
+            <span class="face"></span>
+            <span class="hair"></span>
+            <span class="ear left"></span>
+            <span class="ear right"></span>
+            <span class="eye left"></span>
+            <span class="eye right"></span>
+            <span class="brow left"></span>
+            <span class="brow right"></span>
+            <span class="nose"></span>
+            <span class="smile"></span>
+            <span class="neck"></span>
+            <span class="suit"></span>
+          </div>
+          <div class="map-roll"></div>
+        </div>
+        <form id="setupForm" class="setup-panel">
+          <p class="eyebrow">시장 임명장</p>
+          <h1>신도시 프로젝트</h1>
+          <label>
+            시장 이름
+            <input id="mayorName" type="text" value="박수빈" maxlength="12" required />
+          </label>
+          <label>
+            도시 이름
+            <input id="cityName" type="text" value="행복시" maxlength="12" required />
+          </label>
+          <div class="candidate-picker">
+            <span>시장 후보 사진</span>
+            <div class="candidate-options" role="group" aria-label="시장 후보 사진 선택">
+              <button class="candidate-option is-selected" type="button" data-avatar="1" aria-label="할머니 시장 후보 선택">
+                <span class="candidate-avatar avatar-1"></span>
+              </button>
+              <button class="candidate-option" type="button" data-avatar="2" aria-label="할아버지 시장 후보 선택">
+                <span class="candidate-avatar avatar-2"></span>
+              </button>
+              <button class="candidate-option" type="button" data-avatar="3" aria-label="30대 여성 시장 후보 선택">
+                <span class="candidate-avatar avatar-3"></span>
+              </button>
+              <button class="candidate-option" type="button" data-avatar="4" aria-label="30대 남성 시장 후보 선택">
+                <span class="candidate-avatar avatar-4"></span>
+              </button>
+              <button class="candidate-option" type="button" data-avatar="5" aria-label="40대 여성 시장 후보 선택">
+                <span class="candidate-avatar avatar-5"></span>
+              </button>
+            </div>
+          </div>
+          <div class="loan-picker">
+            <span>초기 대출 금액</span>
+            <div class="loan-options" role="group" aria-label="초기 대출 금액">
+              <button class="loan-chip is-selected" type="button" data-loan="500000000">5억</button>
+              <button class="loan-chip" type="button" data-loan="1000000000">10억</button>
+              <button class="loan-chip" type="button" data-loan="2000000000">20억</button>
+            </div>
+            <input id="customLoan" type="number" min="1" max="99" placeholder="직접 입력: 억 단위" />
+          </div>
+          <button class="primary-btn wide" type="submit">임명 받고 시작</button>
+        </form>
+      </section>
+
+      <section id="firstInvestmentScreen" class="screen investment-screen" aria-label="첫 투자">
+        <div class="section-head">
+          <p class="eyebrow">정부 질문</p>
+          <h1>가장 먼저 어떤 분야에 투자하시겠습니까?</h1>
+          <p>첫 투자는 도시의 성장 방향에 영향을 줍니다.</p>
+        </div>
+        <div class="investment-grid">
+          <button class="investment-card" type="button" data-field="education">
+            <span class="big-icon">교</span>
+            <strong>교육</strong>
+            <small>교육혁신센터, 학교, 도서관, 교사 지원</small>
+          </button>
+          <button class="investment-card" type="button" data-field="agriculture">
+            <span class="big-icon">농</span>
+            <strong>농업</strong>
+            <small>스마트팜, 대형 농장, 과수원, 농산물 판매</small>
+          </button>
+          <button class="investment-card" type="button" data-field="industry">
+            <span class="big-icon">산</span>
+            <strong>산업</strong>
+            <small>산업단지, 기업 유치, 공장, 창업센터</small>
+          </button>
+        </div>
+        <div class="budget-row">
+          <label for="firstBudget">투자 예산</label>
+          <input id="firstBudget" type="range" min="1" max="10" value="4" />
+          <output id="firstBudgetOutput">2억</output>
+        </div>
+        <button id="confirmInvestmentBtn" class="primary-btn wide" type="button" disabled>도시 운영 시작</button>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen" aria-label="도시 운영">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="mayorBadge">시장</p>
+            <h1 id="cityTitle">행복시</h1>
+          </div>
+          <div class="topbar-right">
+            <div class="cash-badge">
+              <span>보유 자금</span>
+              <strong id="cashBadgeValue">0억</strong>
+            </div>
+            <div class="season-clock">
+              <strong id="seasonName">봄</strong>
+              <span id="seasonTimer">05:00</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="stats-grid" aria-label="도시 능력치">
+          <article class="stat-card money">
+            <span>경제</span>
+            <strong id="moneyValue">0억</strong>
+            <meter id="economyMeter" min="0" max="100" value="45"></meter>
+          </article>
+          <article class="stat-card happy">
+            <span>주민 만족도</span>
+            <strong id="happyValue">55</strong>
+            <meter id="happyMeter" min="0" max="100" value="55"></meter>
+          </article>
+          <article class="stat-card growth">
+            <span>도시 발전도</span>
+            <strong id="growthValue">25</strong>
+            <meter id="growthMeter" min="0" max="100" value="25"></meter>
+          </article>
+          <article class="stat-card debt">
+            <span>남은 빚</span>
+            <strong id="debtValue">0억</strong>
+            <meter id="debtMeter" min="0" max="100" value="50"></meter>
+          </article>
+        </section>
+
+        <section class="play-area">
+          <div class="city-map" aria-label="도시 지도">
+            <div class="skyline">
+              <span class="map-sun"></span>
+              <span class="cloud c1"></span>
+              <span class="cloud c2"></span>
+              <span class="building b1"></span>
+              <span class="building b2"></span>
+              <span class="building b3"></span>
+              <span class="building b4"></span>
+              <span class="shop"></span>
+              <span class="park"></span>
+              <span class="tree t1"></span>
+              <span class="tree t2"></span>
+              <span class="tree t3"></span>
+              <span class="road"></span>
+              <span class="bus"></span>
+            </div>
+            <div class="map-label" id="mapLabel">새로운 도시가 자라고 있어요</div>
+          </div>
+
+          <article class="event-panel">
+            <div class="event-title-row">
+              <span id="eventMark" class="event-mark">!</span>
+              <div>
+                <p class="eyebrow" id="eventSeason">봄 사건</p>
+                <h2 id="eventTitle">기업 입주 제안</h2>
+              </div>
+            </div>
+            <p id="eventDescription">기업들이 신도시에 들어오고 싶어 합니다.</p>
+            <div id="choices" class="choices"></div>
+          </article>
+        </section>
+
+        <footer class="actionbar">
+          <button id="loanBtn" class="secondary-btn" type="button">추가 대출 3억</button>
+          <button id="repayBtn" class="secondary-btn" type="button">빚 상환 3억</button>
+          <button id="pauseBtn" class="secondary-btn" type="button">일시정지</button>
+        </footer>
+      </section>
+
+      <section id="endingScreen" class="screen ending-screen" aria-label="엔딩">
+        <div class="ending-card">
+          <p class="eyebrow">정부 최종 평가</p>
+          <h1 id="endingTitle">성공 엔딩</h1>
+          <p id="endingMessage">당신은 대한민국 최고의 시장입니다.</p>
+          <div class="score-ring">
+            <span id="finalScore">0</span>
+            <small>점</small>
+          </div>
+          <dl class="final-stats">
+            <div><dt>경제</dt><dd id="finalEconomy">0</dd></div>
+            <div><dt>만족도</dt><dd id="finalHappy">0</dd></div>
+            <div><dt>발전도</dt><dd id="finalGrowth">0</dd></div>
+            <div><dt>남은 빚</dt><dd id="finalDebt">0억</dd></div>
+          </dl>
+          <button id="restartBtn" class="primary-btn wide" type="button">다시 도전</button>
+        </div>
+      </section>
+    </main>
+    <script src="./game.js?v=20260710-harder-faces"></script>
+  </body>
+</html>
